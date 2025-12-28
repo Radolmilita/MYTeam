@@ -1,0 +1,42 @@
+<h2 mat-dialog-title>{{ data.fullName }}</h2>
+
+<mat-dialog-content class="content">
+  <div class="header">
+    <img class="photo" [src]="data.photoUrl" [alt]="data.fullName" />
+    <div class="meta">
+      <div class="role">{{ data.role }}</div>
+      <div class="line"><b>Location:</b> {{ data.location }}</div>
+      <div class="line"><b>Email:</b> {{ data.email }}</div>
+      <div class="line" *ngIf="data.telegram"><b>Telegram:</b> {{ data.telegram }}</div>
+      <div class="line"><b>Joined:</b> {{ data.joinedAtIso | date: 'mediumDate' }}</div>
+    </div>
+  </div>
+
+  <mat-divider></mat-divider>
+
+  <div class="section">
+    <h3>Bio</h3>
+    <p class="bio">{{ data.bio }}</p>
+  </div>
+
+  <div class="section">
+    <h3>Skills</h3>
+    <mat-chip-set>
+      <mat-chip *ngFor="let s of data.skills">{{ s }}</mat-chip>
+    </mat-chip-set>
+  </div>
+
+  <div class="section" *ngIf="data.interests?.length">
+    <h3>Interests</h3>
+    <mat-chip-set>
+      <mat-chip *ngFor="let i of data.interests">{{ i }}</mat-chip>
+    </mat-chip-set>
+  </div>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close>
+    <mat-icon>close</mat-icon>
+    Close
+  </button>
+</mat-dialog-actions>

@@ -1,0 +1,21 @@
+<h2 mat-dialog-title>Item details</h2>
+
+<mat-dialog-content>
+  <mat-card appearance="outlined">
+    <mat-card-content>
+      <div class="row"><b>ID:</b> {{ data.id }}</div>
+      <div class="row"><b>Name:</b> {{ data.name }}</div>
+      <div class="row"><b>Category:</b> {{ data.category }}</div>
+      <div class="row"><b>Price:</b> ${{ data.priceUsd }}</div>
+      <div class="row"><b>In stock:</b> {{ data.inStock }}</div>
+      <div class="row"><b>Updated:</b> {{ data.updatedAtIso | date : 'medium' }}</div>
+    </mat-card-content>
+  </mat-card>
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button mat-button mat-dialog-close>
+    <mat-icon>close</mat-icon>
+    Close
+  </button>
+</mat-dialog-actions>

@@ -1,0 +1,114 @@
+<div class="page">
+  <!-- SECTION 1: COACH -->
+  <div class="section-head">
+    <div class="section-title">Coach</div>
+    <button mat-raised-button color="primary" (click)="refresh()">
+      <mat-icon>refresh</mat-icon>
+      Refresh
+    </button>
+  </div>
+
+  <button class="coach-btn" type="button" (click)="open(coach())" aria-label="Open coach details">
+    <mat-card class="coach-card" appearance="outlined">
+      <div class="photo-wrap coach-photo">
+        <img class="photo" [src]="coach().photoUrl" [alt]="coach().fullName" />
+        <div class="photo-topline"></div>
+
+        <!-- Видимо всегда: только имя/фамилия -->
+        <div class="name-badge">
+          <div class="name">{{ coach().fullName }}</div>
+        </div>
+      </div>
+
+      <!-- Остальное: только при наведении -->
+      <div class="details">
+        <div class="details-topline"></div>
+
+        <div class="details-body">
+          <div class="details-name">{{ coach().fullName }}</div>
+          <div class="details-role">{{ coach().role }}</div>
+
+          <div class="details-text">{{ coach().shortBio }}</div>
+
+          <div class="chips">
+            <mat-chip-set>
+              <mat-chip *ngFor="let s of coach().skills.slice(0, 6)">{{ s }}</mat-chip>
+            </mat-chip-set>
+          </div>
+
+          <div class="cta">
+            <span>Открыть профиль</span>
+            <span class="dot"></span>
+          </div>
+        </div>
+      </div>
+    </mat-card>
+  </button>
+
+  <!-- RED DIVIDER -->
+  <mat-divider class="red-divider"></mat-divider>
+
+  <!-- SECTION 2: TEAM MEMBERS витрина -->
+  <div class="section-head second">
+    <div class="section-title">Team Members</div>
+  </div>
+
+  <div *ngIf="members().length; else empty" class="marquee">
+    <div class="marquee-viewport" aria-label="Team members carousel">
+      <div class="marquee-track">
+        <button
+          class="card-btn"
+          type="button"
+          *ngFor="let m of membersLoop(); trackBy: trackByMember"
+          (click)="open(m)"
+          aria-label="Open team member details"
+        >
+          <mat-card class="member-card" appearance="outlined">
+            <div class="photo-wrap">
+              <img class="photo" [src]="m.photoUrl" [alt]="m.fullName" />
+              <div class="photo-topline"></div>
+
+              <!-- Видимо всегда: только имя/фамилия -->
+              <div class="name-badge">
+                <div class="name">{{ m.fullName }}</div>
+              </div>
+            </div>
+
+            <!-- Остальное: только при наведении -->
+            <div class="details">
+              <div class="details-topline"></div>
+
+              <div class="details-body">
+                <div class="details-name">{{ m.fullName }}</div>
+                <div class="details-role">{{ m.role }}</div>
+
+                <div class="details-text">{{ m.shortBio }}</div>
+
+                <div class="chips">
+                  <mat-chip-set>
+                    <mat-chip *ngFor="let s of m.skills.slice(0, 6)">{{ s }}</mat-chip>
+                  </mat-chip-set>
+                </div>
+
+                <div class="cta">
+                  <span>Подробнее</span>
+                  <span class="dot"></span>
+                </div>
+              </div>
+            </div>
+          </mat-card>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <ng-template #empty>
+    <div class="empty">
+      <mat-icon>group_off</mat-icon>
+      <div>
+        <div class="empty-title">Нет данных</div>
+        <div class="empty-hint">Проверь мок-данные или нажми Refresh.</div>
+      </div>
+    </div>
+  </ng-template>
+</div>

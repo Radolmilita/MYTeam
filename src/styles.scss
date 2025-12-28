@@ -1,0 +1,78 @@
+@use '@angular/material' as mat;
+
+/* ===== Material Theme (M2 API) ===== */
+@include mat.core();
+
+$primary: mat.m2-define-palette(mat.$m2-red-palette, 700, 500, 900);
+$accent: mat.m2-define-palette(mat.$m2-grey-palette, 900, 700, 900);
+$warn: mat.m2-define-palette(mat.$m2-red-palette, 700);
+
+$theme: mat.m2-define-light-theme((
+  color: (
+    primary: $primary,
+    accent: $accent,
+    warn: $warn,
+  ),
+));
+
+@include mat.all-component-themes($theme);
+
+/* ===== Brand tokens (red / white / black) ===== */
+:root {
+  --c-bg: #f6f6f6;
+  --c-surface: #ffffff;
+
+  --c-black: #0b0b0b;
+  --c-text: rgba(0, 0, 0, 0.88);
+  --c-muted: rgba(0, 0, 0, 0.62);
+
+  --c-red: #d32f2f;      /* primary */
+  --c-red-600: #e53935;  /* hover */
+  --c-border: rgba(0, 0, 0, 0.12);
+  --c-shadow: rgba(0, 0, 0, 0.14);
+
+  --radius: 16px;
+}
+
+/* ===== Base ===== */
+html, body { height: 100%; }
+
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+  background: var(--c-bg);
+  color: var(--c-text);
+}
+
+a { color: inherit; }
+
+.page {
+  padding: 18px 16px 28px;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.spacer { flex: 1 1 auto; }
+
+/* ===== Small global polish for Material surfaces ===== */
+.mat-mdc-card {
+  border-radius: var(--radius) !important;
+  border: 1px solid var(--c-border);
+  background: var(--c-surface);
+}
+
+.mat-mdc-dialog-container .mdc-dialog__surface {
+  border-radius: 18px !important;
+  border: 1px solid var(--c-border);
+}
+
+/* Better focus ring visibility */
+:focus-visible {
+  outline: 3px solid rgba(211, 47, 47, 0.35);
+  outline-offset: 2px;
+}
+
+body.intro-lock {
+  overflow: hidden;
+}
+

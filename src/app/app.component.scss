@@ -1,0 +1,60 @@
+:host {
+  display: block;
+  min-height: 100%;
+}
+
+.app-toolbar {
+  background: #ffffff;
+  color: rgba(0, 0, 0, 0.87);
+  border-bottom: 1px solid rgba(0, 0, 0, 0.08);
+  padding: 0 16px; /* важно: совпадает с финальной точкой интро (left=16px) */
+}
+
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  text-decoration: none;
+  color: inherit;
+
+  opacity: 1;
+  transition: opacity 240ms ease;
+}
+
+.brand-hidden {
+  opacity: 0;
+  pointer-events: none;
+}
+
+.brand-icon {
+  width: 28px;
+  height: 28px;
+}
+
+.brand-name-img {
+  height: 22px;
+  width: auto;
+  display: block;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.app-shell {
+  opacity: 1;
+  transition: opacity 280ms ease;
+}
+
+.app-shell-hidden {
+  opacity: 0;
+  pointer-events: none;
+}

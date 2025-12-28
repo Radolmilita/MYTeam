@@ -1,0 +1,133 @@
+:host {
+  position: fixed;
+  inset: 0;
+  z-index: 3000;
+  display: block;
+}
+
+.overlay {
+  position: absolute;
+  inset: 0;
+  background: #ffffff;
+  /* лёгкий “брендовый” оттенок */
+  background: radial-gradient(circle at 50% 40%, rgba(211, 47, 47, 0.06), transparent 55%), #fff;
+
+  animation: overlayFade 7s ease forwards;
+}
+
+/* общий стиль стадий */
+.stage {
+  position: fixed;
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%);
+  opacity: 0;
+  pointer-events: none;
+}
+
+/* ========== Stage 1: logo ========== */
+.stage-logo {
+  animation: stageLogo 7s ease forwards;
+}
+
+.logo {
+  width: 180px;
+  height: 180px;
+  filter: drop-shadow(0 14px 30px rgba(0, 0, 0, 0.18));
+}
+
+/* ========== Stage 2: name image ========== */
+.stage-name {
+  animation: stageName 7s ease forwards;
+}
+
+.name {
+  height: 72px;
+  width: auto;
+  filter: drop-shadow(0 14px 30px rgba(0, 0, 0, 0.18));
+}
+
+/* ========== Stage 3: brand flies into header ========== */
+.stage-brand {
+  /* начальная позиция центр, потом улетает в левый верх (в хедер) */
+  left: 50%;
+  top: 50%;
+  transform: translate(-50%, -50%) scale(1);
+  animation: stageBrand 7s ease forwards;
+}
+
+.brand {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 12px;
+  border-radius: 18px;
+  background: rgba(255, 255, 255, 0.88);
+  border: 1px solid rgba(0, 0, 0, 0.10);
+  backdrop-filter: blur(8px);
+  box-shadow: 0 14px 30px rgba(0, 0, 0, 0.16);
+}
+
+.brand-logo {
+  width: 34px;
+  height: 34px;
+}
+
+.brand-name {
+  height: 26px;
+  width: auto;
+}
+
+/* ====== Keyframes timeline (total 7s) ======
+   0–~2.3s  : logo
+   ~2.3–~4.4s: name
+   ~4.4–7s  : brand appear + fly into header
+*/
+
+@keyframes stageLogo {
+  0%   { opacity: 0; transform: translate(-50%, -50%) scale(0.92); }
+  6%   { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+  30%  { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+  38%  { opacity: 0; transform: translate(-50%, -50%) scale(0.98); }
+  100% { opacity: 0; }
+}
+
+@keyframes stageName {
+  0%   { opacity: 0; transform: translate(-50%, -50%) scale(0.98); }
+  34%  { opacity: 0; transform: translate(-50%, -50%) scale(0.98); }
+  42%  { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+  60%  { opacity: 1; transform: translate(-50%, -50%) scale(1); }
+  68%  { opacity: 0; transform: translate(-50%, -50%) scale(0.99); }
+  100% { opacity: 0; }
+}
+
+@keyframes stageBrand {
+  0%   { opacity: 0; }
+  60%  { opacity: 0; left: 50%; top: 50%; transform: translate(-50%, -50%) scale(1); }
+  68%  { opacity: 1; left: 50%; top: 50%; transform: translate(-50%, -50%) scale(1); }
+
+  /* полёт в хедер: left=16px, top=32px (центр тулбара), и уменьшение */
+  100% {
+    opacity: 1;
+    left: 16px;
+    top: 32px;
+    transform: translate(0, -50%) scale(0.62);
+  }
+}
+
+@keyframes overlayFade {
+  0%   { opacity: 1; }
+  86%  { opacity: 1; }
+  100% { opacity: 0; }
+}
+
+/* Если у пользователя reduced-motion — не крутим анимацию */
+@media (prefers-reduced-motion: reduce) {
+  .overlay,
+  .stage-logo,
+  .stage-name,
+  .stage-brand {
+    animation: none !important;
+  }
+  :host { display: none; }
+}

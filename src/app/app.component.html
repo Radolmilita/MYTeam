@@ -1,0 +1,17 @@
+<mat-toolbar class="app-toolbar">
+  <a class="brand" [class.brand-hidden]="showIntro" routerLink="/" aria-label="MY Team">
+    <mat-icon class="brand-icon" svgIcon="assets/logo.svg"></mat-icon>
+    <img class="brand-name-img" src="assets/team-name.svg" alt="MY Team" />
+    <span class="sr-only">MY Team</span>
+  </a>
+
+  <span class="spacer"></span>
+</mat-toolbar>
+
+<!-- Интро поверх всего -->
+<app-intro-splash *ngIf="showIntro" (done)="onIntroDone()"></app-intro-splash>
+
+<!-- Контент (home) появится после интро -->
+<div class="app-shell" [class.app-shell-hidden]="showIntro">
+  <router-outlet></router-outlet>
+</div>

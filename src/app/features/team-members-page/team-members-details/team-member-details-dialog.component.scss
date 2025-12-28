@@ -1,0 +1,54 @@
+.content { display: block; }
+
+.header {
+  display: grid;
+  grid-template-columns: 170px 1fr;
+  gap: 16px;
+  align-items: start;
+  margin-bottom: 16px;
+}
+
+.photo {
+  width: 170px;
+  height: 170px;
+  object-fit: cover;
+  border-radius: 14px;
+  border: 2px solid rgba(211, 47, 47, 0.55);
+}
+
+.meta .role {
+  font-weight: 900;
+  color: var(--c-red);
+  text-transform: uppercase;
+  letter-spacing: 0.2px;
+  margin-bottom: 8px;
+}
+
+.meta .line {
+  margin: 4px 0;
+  color: var(--c-text);
+}
+
+.section { margin-top: 16px; }
+.section h3 {
+  margin: 0 0 8px;
+  color: var(--c-black);
+  font-weight: 900;
+}
+
+.bio {
+  margin: 0;
+  line-height: 1.45;
+  color: var(--c-text);
+}
+
+:host ::ng-deep .mat-mdc-chip {
+  border: 1px solid rgba(11, 11, 11, 0.16);
+  background: #fff;
+  color: var(--c-black);
+}
+
+@media (max-width: 520px) {
+  .header { grid-template-columns: 1fr; }
+  .photo { width: 100%; height: 210px; }
+}
