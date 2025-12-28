@@ -6,8 +6,8 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatButtonModule } from '@angular/material/button';
 import { MatIconModule, MatIconRegistry } from '@angular/material/icon';
 import { DomSanitizer } from '@angular/platform-browser';
-import { IntroSplashComponent } from './features/info-splash/intro-splash.component';
 
+import { IntroSplashComponent } from './features/info-splash/intro-splash.component';
 
 @Component({
   selector: 'app-root',
@@ -26,13 +26,13 @@ import { IntroSplashComponent } from './features/info-splash/intro-splash.compon
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class AppComponent {
-  // интро показываем один раз на загрузку приложения
   showIntro = true;
 
   constructor(iconRegistry: MatIconRegistry, sanitizer: DomSanitizer) {
+    // В твоём проекте есть src/assets/logo.svg
     iconRegistry.addSvgIcon(
       'teamLogo',
-      sanitizer.bypassSecurityTrustResourceUrl('assets/icons/team.svg'),
+      sanitizer.bypassSecurityTrustResourceUrl('assets/logo.svg'),
     );
 
     document.body.classList.add('intro-lock');

@@ -8,10 +8,7 @@
 .overlay {
   position: absolute;
   inset: 0;
-  background: #ffffff;
-  /* лёгкий “брендовый” оттенок */
   background: radial-gradient(circle at 50% 40%, rgba(211, 47, 47, 0.06), transparent 55%), #fff;
-
   animation: overlayFade 7s ease forwards;
 }
 
@@ -25,108 +22,131 @@
   pointer-events: none;
 }
 
-/* ========== Stage 1: logo ========== */
+/* =========================
+   Stage 1: BIG logo (60% screen)
+   ========================= */
 .stage-logo {
   animation: stageLogo 7s ease forwards;
 }
 
 .logo {
-  width: 180px;
-  height: 180px;
-  filter: drop-shadow(0 14px 30px rgba(0, 0, 0, 0.18));
+  width: clamp(280px, 60vmin, 820px);
+  height: clamp(280px, 60vmin, 820px);
+  filter: drop-shadow(0 16px 34px rgba(0, 0, 0, 0.18));
 }
 
-/* ========== Stage 2: name image ========== */
-.stage-name {
-  animation: stageName 7s ease forwards;
-}
-
-.name {
-  height: 72px;
-  width: auto;
-  filter: drop-shadow(0 14px 30px rgba(0, 0, 0, 0.18));
-}
-
-/* ========== Stage 3: brand flies into header ========== */
+/* =========================
+   Stage 2/3: Brand lockup morph + fly
+   (название раскрывается справа, не поверх лого)
+   ========================= */
 .stage-brand {
-  /* начальная позиция центр, потом улетает в левый верх (в хедер) */
-  left: 50%;
-  top: 50%;
-  transform: translate(-50%, -50%) scale(1);
-  animation: stageBrand 7s ease forwards;
+  animation: stageBrandMove 7s ease forwards;
 }
 
 .brand {
   display: inline-flex;
   align-items: center;
-  gap: 10px;
-  padding: 10px 12px;
-  border-radius: 18px;
-  background: rgba(255, 255, 255, 0.88);
-  border: 1px solid rgba(0, 0, 0, 0.10);
-  backdrop-filter: blur(8px);
-  box-shadow: 0 14px 30px rgba(0, 0, 0, 0.16);
+  gap: 18px;
+  transform-origin: left center;
+  filter: drop-shadow(0 14px 30px rgba(0, 0, 0, 0.16));
 }
 
+/* Лого внутри lockup: от большого к хедеру */
 .brand-logo {
-  width: 34px;
-  height: 34px;
+  width: clamp(280px, 60vmin, 820px);
+  height: clamp(280px, 60vmin, 820px);
+  animation: brandLogoResize 7s ease forwards;
+  transform-origin: left center;
 }
 
+/* Название: появляется НЕ поверх лого, а раскрывается справа */
 .brand-name {
-  height: 26px;
+  height: clamp(52px, 10vmin, 92px);
   width: auto;
+
+  opacity: 0;
+  clip-path: inset(0 100% 0 0);
+  transform: translateX(-8px);
+
+  animation: brandNameRevealAndResize 7s ease forwards;
+  transform-origin: left center;
 }
 
-/* ====== Keyframes timeline (total 7s) ======
-   0–~2.3s  : logo
-   ~2.3–~4.4s: name
-   ~4.4–7s  : brand appear + fly into header
+/* ===== Timeline (7s) =====
+   0–~3.4s  : logo grows big
+   ~3.4–~5.2s: превращение в связку (name раскрывается справа)
+   ~5.2–7.0s : fly into header
 */
 
+/* 1) Большое лого растёт, потом исчезает */
 @keyframes stageLogo {
-  0%   { opacity: 0; transform: translate(-50%, -50%) scale(0.92); }
-  6%   { opacity: 1; transform: translate(-50%, -50%) scale(1); }
-  30%  { opacity: 1; transform: translate(-50%, -50%) scale(1); }
-  38%  { opacity: 0; transform: translate(-50%, -50%) scale(0.98); }
+  0%   { opacity: 0; transform: translate(-50%, -50%) scale(0.74); }
+  8%   { opacity: 1; transform: translate(-50%, -50%) scale(0.90); }
+  44%  { opacity: 1; transform: translate(-50%, -50%) scale(1.06); }
+  52%  { opacity: 0; transform: translate(-50%, -50%) scale(1.06); }
   100% { opacity: 0; }
 }
 
-@keyframes stageName {
-  0%   { opacity: 0; transform: translate(-50%, -50%) scale(0.98); }
-  34%  { opacity: 0; transform: translate(-50%, -50%) scale(0.98); }
-  42%  { opacity: 1; transform: translate(-50%, -50%) scale(1); }
-  60%  { opacity: 1; transform: translate(-50%, -50%) scale(1); }
-  68%  { opacity: 0; transform: translate(-50%, -50%) scale(0.99); }
-  100% { opacity: 0; }
-}
+/* 2/3) Lockup появляется в центре, “собирается” (без наложения) и летит в хедер */
+@keyframes stageBrandMove {
+  0%   { opacity: 0; left: 50%; top: 50%; transform: translate(-50%, -50%); }
+  40%  { opacity: 0; left: 50%; top: 50%; transform: translate(-50%, -50%); }
 
-@keyframes stageBrand {
-  0%   { opacity: 0; }
-  60%  { opacity: 0; left: 50%; top: 50%; transform: translate(-50%, -50%) scale(1); }
-  68%  { opacity: 1; left: 50%; top: 50%; transform: translate(-50%, -50%) scale(1); }
+  /* появляется вместо большого лого */
+  52%  { opacity: 1; left: 50%; top: 50%; transform: translate(-50%, -50%); }
 
-  /* полёт в хедер: left=16px, top=32px (центр тулбара), и уменьшение */
+  /* держим по центру пока “собирается” связка */
+  74%  { opacity: 1; left: 50%; top: 50%; transform: translate(-50%, -50%); }
+
+  /* полёт в хедер */
   100% {
     opacity: 1;
-    left: 16px;
-    top: 32px;
-    transform: translate(0, -50%) scale(0.62);
+    left: 16px;  /* совпадает с padding тулбара */
+    top: 32px;   /* центр стандартного mat-toolbar */
+    transform: translate(0, -50%);
   }
 }
 
+/* Лого внутри связки уменьшается к размеру хедера */
+@keyframes brandLogoResize {
+  0%   { width: clamp(280px, 60vmin, 820px); height: clamp(280px, 60vmin, 820px); }
+  52%  { width: clamp(280px, 60vmin, 820px); height: clamp(280px, 60vmin, 820px); }
+
+  /* сборка lockup */
+  68%  { width: 96px; height: 96px; }
+  74%  { width: 64px; height: 64px; }
+
+  /* размер иконки в хедере */
+  100% { width: 28px; height: 28px; }
+}
+
+/* Название раскрывается справа (не поверх лого) + уменьшается к хедеру */
+@keyframes brandNameRevealAndResize {
+  0%   { opacity: 0; clip-path: inset(0 100% 0 0); transform: translateX(-8px); height: clamp(52px, 10vmin, 92px); }
+  52%  { opacity: 0; clip-path: inset(0 100% 0 0); transform: translateX(-8px); height: clamp(52px, 10vmin, 92px); }
+
+  /* раскрытие названия */
+  60%  { opacity: 1; clip-path: inset(0 0 0 0); transform: translateX(0); height: 42px; }
+  74%  { opacity: 1; clip-path: inset(0 0 0 0); transform: translateX(0); height: 34px; }
+
+  /* размер названия в хедере */
+  100% { opacity: 1; clip-path: inset(0 0 0 0); transform: translateX(0); height: 22px; }
+}
+
+/* overlay исчезает к концу */
 @keyframes overlayFade {
   0%   { opacity: 1; }
-  86%  { opacity: 1; }
+  92%  { opacity: 1; }
   100% { opacity: 0; }
 }
 
-/* Если у пользователя reduced-motion — не крутим анимацию */
+/* Reduced motion */
 @media (prefers-reduced-motion: reduce) {
   .overlay,
   .stage-logo,
-  .stage-name,
-  .stage-brand {
+  .stage-brand,
+  .brand-logo,
+  .brand-name {
     animation: none !important;
   }
   :host { display: none; }

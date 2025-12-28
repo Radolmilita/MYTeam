@@ -1,4 +1,79 @@
-/* ===== Section headers ===== */
+:host {
+  display: block;
+  /* var(--p) приходит из host binding в компоненте */
+  --p: 0;
+}
+
+/* ===== Плавный фон в чёрный ===== */
+.bg-fade {
+  position: fixed;
+  inset: 0;
+  background: #0b0b0b;
+  opacity: var(--p);
+  pointer-events: none;
+  z-index: 0;
+  will-change: opacity;
+}
+
+.page {
+  position: relative;
+  z-index: 1; /* поверх bg-fade */
+}
+
+/* ===== Scroll stage (задаёт “дистанцию” для анимации) ===== */
+.scroll-stage {
+  min-height: 220vh; /* можно увеличить/уменьшить “длину” перехода */
+}
+
+.sticky {
+  position: sticky;
+  top: 84px; /* под тулбаром */
+  height: calc(100vh - 96px);
+  min-height: 620px;
+}
+
+@media (max-width: 600px) {
+  .sticky {
+    top: 72px;
+    height: calc(100vh - 84px);
+    min-height: 560px;
+  }
+}
+
+.panels {
+  position: relative;
+  height: 100%;
+}
+
+/* ===== Две секции накладываются и плавно меняются по opacity/transform ===== */
+.panel {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
+.panel-disabled {
+  pointer-events: none; /* чтобы “невидимая” секция не ловила клики */
+}
+
+.coach-panel {
+  opacity: calc(1 - var(--p));
+  transform: translateY(calc(var(--p) * -18px));
+}
+
+.members-panel {
+  opacity: var(--p);
+  transform: translateY(calc((1 - var(--p)) * 18px));
+  color: rgba(255, 255, 255, 0.92);
+}
+
+.members-panel .section-title {
+  color: rgba(255, 255, 255, 0.92);
+}
+
+/* ===== Заголовки секций ===== */
 .section-head {
   display: flex;
   align-items: center;
@@ -19,18 +94,17 @@
   color: var(--c-black);
 }
 
-/* ===== Red divider (required) ===== */
+/* ===== Красный разделитель (обязательный) ===== */
 .red-divider {
-  margin: 8px 0 16px;
   border-top-width: 2px !important;
   border-top-color: var(--c-red) !important;
-  opacity: 1 !important;
+  opacity: var(--p) !important; /* появляется вместе с секцией участниц */
 }
 
-/* ===== Shared card behavior (only photo + name visible until hover) ===== */
+/* ===== Карточки: видно фото + имя, остальное по hover ===== */
 .photo-wrap {
   position: relative;
-  height: 340px; /* карточка = витрина: большая фотка */
+  height: 340px;
   background: #fff;
 }
 
@@ -149,7 +223,7 @@
   box-shadow: 0 0 0 4px rgba(211, 47, 47, 0.16);
 }
 
-/* ===== Coach card wrapper ===== */
+/* ===== Coach wrapper ===== */
 .coach-btn {
   width: 100%;
   padding: 0;
@@ -157,7 +231,6 @@
   background: transparent;
   text-align: left;
   cursor: pointer;
-  margin-bottom: 16px;
 }
 
 .coach-card,
@@ -170,7 +243,7 @@
   transition: transform 140ms ease, box-shadow 140ms ease, border-color 140ms ease;
 }
 
-/* Появление details и hover-эффект */
+/* Hover эффекты + раскрытие details */
 .coach-btn:hover .coach-card,
 .coach-btn:focus-visible .coach-card,
 .card-btn:hover .member-card,
@@ -187,12 +260,11 @@
   transform: translateY(0);
 }
 
-/* ===== Members "vitrina" marquee ===== */
+/* ===== Members marquee витрина ===== */
 .marquee {
   position: relative;
 }
 
-/* Маска по краям */
 .marquee-viewport {
   overflow: hidden;
   border-radius: var(--radius);
@@ -232,14 +304,13 @@
   }
 }
 
-/* Карточка в витрине */
+/* карточка в витрине */
 .card-btn {
   padding: 0;
   border: 0;
   background: transparent;
   text-align: left;
   cursor: pointer;
-
   flex: 0 0 300px;
 }
 
@@ -249,7 +320,7 @@
   gap: 12px;
   align-items: center;
   padding: 24px 8px;
-  opacity: 0.9;
+  opacity: 0.92;
 }
 
 .empty mat-icon {
@@ -261,10 +332,10 @@
 
 .empty-title {
   font-weight: 900;
-  color: var(--c-black);
+  color: #fff;
 }
 
 .empty-hint {
   font-size: 13px;
-  color: var(--c-muted);
+  color: rgba(255, 255, 255, 0.72);
 }
