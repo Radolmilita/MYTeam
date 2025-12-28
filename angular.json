@@ -72,6 +72,9 @@
           "options": {
             "buildTarget": "angular-material-mock-skeleton:build"
           }
+        },
+        "deploy": {
+          "builder": "angular-cli-ghpages:deploy"
         }
       }
     }

@@ -8,26 +8,26 @@ import {
   computed,
   inject,
   signal,
-} from '@angular/core';
-import { NgFor, NgIf } from '@angular/common';
+} from "@angular/core";
+import { NgFor, NgIf } from "@angular/common";
 
-import { MatCardModule } from '@angular/material/card';
-import { MatDialog, MatDialogModule } from '@angular/material/dialog';
-import { MatButtonModule } from '@angular/material/button';
-import { MatIconModule } from '@angular/material/icon';
-import { MatChipsModule } from '@angular/material/chips';
-import { MatDividerModule } from '@angular/material/divider';
+import { MatCardModule } from "@angular/material/card";
+import { MatDialog, MatDialogModule } from "@angular/material/dialog";
+import { MatButtonModule } from "@angular/material/button";
+import { MatIconModule } from "@angular/material/icon";
+import { MatChipsModule } from "@angular/material/chips";
+import { MatDividerModule } from "@angular/material/divider";
 
-import { fromEvent, merge } from 'rxjs';
-import { auditTime, startWith } from 'rxjs/operators';
-import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { fromEvent, merge } from "rxjs";
+import { auditTime, startWith } from "rxjs/operators";
+import { takeUntilDestroyed } from "@angular/core/rxjs-interop";
 
-import { TeamService } from '../../services/team.service';
-import { TeamMember } from '../../models/team-member';
-import { TeamMemberDetailsDialogComponent } from './team-members-details/team-member-details-dialog.component';
+import { TeamService } from "../../services/team.service";
+import { TeamMember } from "../../models/team-member";
+import { TeamMemberDetailsDialogComponent } from "./team-members-details/team-member-details-dialog.component";
 
 @Component({
-  selector: 'app-team-page',
+  selector: "app-team-page",
   standalone: true,
   imports: [
     NgIf,
@@ -39,12 +39,11 @@ import { TeamMemberDetailsDialogComponent } from './team-members-details/team-me
     MatChipsModule,
     MatDividerModule,
   ],
-  templateUrl: './team-page.component.html',
-  styleUrl: './team-page.component.scss',
+  templateUrl: "./team-page.component.html",
+  styleUrl: "./team-page.component.scss",
   changeDetection: ChangeDetectionStrategy.OnPush,
   host: {
-    // CSS variable для плавных стилей (фон/замена секций)
-    '[style.--p]': 'scrollP()',
+    "[style.--p]": "scrollP()",
   },
 })
 export class TeamPageComponent implements AfterViewInit {
@@ -52,12 +51,12 @@ export class TeamPageComponent implements AfterViewInit {
   private readonly dialog = inject(MatDialog);
   private readonly destroyRef = inject(DestroyRef);
 
-  @ViewChild('scrollStage', { static: true }) scrollStage!: ElementRef<HTMLElement>;
+  @ViewChild("scrollStage", { static: true }) scrollStage!: ElementRef<HTMLElement>;
 
-  readonly coach = this.team.coach;
+  readonly coaches = this.team.coaches;
   readonly members = this.team.members;
 
-  // progress 0..1 (0 = тренер, 1 = участницы + черный фон)
+  // progress 0..1 (0 = коучи, 1 = участники + черный фон)
   readonly scrollP = signal(0);
 
   // Для бесшовной “витрины”
@@ -68,8 +67,8 @@ export class TeamPageComponent implements AfterViewInit {
 
   ngAfterViewInit(): void {
     merge(
-      fromEvent(window, 'scroll', { passive: true } as AddEventListenerOptions),
-      fromEvent(window, 'resize', { passive: true } as AddEventListenerOptions),
+      fromEvent(window, "scroll", { passive: true } as AddEventListenerOptions),
+      fromEvent(window, "resize", { passive: true } as AddEventListenerOptions),
     )
       .pipe(auditTime(16), startWith(0), takeUntilDestroyed(this.destroyRef))
       .subscribe(() => this.updateScrollProgress());
@@ -89,7 +88,6 @@ export class TeamPageComponent implements AfterViewInit {
     const maxScroll = Math.max(1, stageHeight - viewportH);
     const raw = (window.scrollY - stageTop) / maxScroll;
 
-    // Чтобы переход завершался чуть раньше и оставалось время “побыть” в секции участниц
     const p = clamp(raw * 1.35, 0, 1);
     this.scrollP.set(p);
   }
@@ -97,8 +95,8 @@ export class TeamPageComponent implements AfterViewInit {
   open(person: TeamMember): void {
     this.dialog.open(TeamMemberDetailsDialogComponent, {
       data: person,
-      width: '720px',
-      maxWidth: '95vw',
+      width: "720px",
+      maxWidth: "95vw",
     });
   }
 
@@ -108,6 +106,10 @@ export class TeamPageComponent implements AfterViewInit {
 
   trackByMember(_index: number, m: TeamMember): string {
     return `${m.id}-${_index}`;
+  }
+
+  trackByCoach(_index: number, c: TeamMember): number {
+    return c.id;
   }
 }
 

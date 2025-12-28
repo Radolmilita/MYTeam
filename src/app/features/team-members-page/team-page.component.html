@@ -6,52 +6,60 @@
   <div class="scroll-stage" #scrollStage>
     <div class="sticky">
       <div class="panels">
-        <!-- PANEL: Coach (исчезает при скролле) -->
+        <!-- PANEL: Coaches (исчезает при скролле) -->
         <section class="panel coach-panel" [class.panel-disabled]="scrollP() > 0.60">
           <div class="section-head">
-            <div class="section-title">Coach</div>
+            <div class="section-title">Coaches</div>
             <button mat-raised-button color="primary" (click)="refresh()">
               <mat-icon>refresh</mat-icon>
               Refresh
             </button>
           </div>
 
-          <button class="coach-btn" type="button" (click)="open(coach())" aria-label="Open coach details">
-            <mat-card class="coach-card" appearance="outlined">
-              <div class="photo-wrap coach-photo">
-                <img class="photo" [src]="coach().photoUrl" [alt]="coach().fullName" />
-                <div class="photo-topline"></div>
+          <div class="coach-grid" *ngIf="coaches().length">
+            <button
+              class="coach-btn"
+              type="button"
+              *ngFor="let c of coaches(); trackBy: trackByCoach"
+              (click)="open(c)"
+              aria-label="Open coach details"
+            >
+              <mat-card class="coach-card" appearance="outlined">
+                <div class="photo-wrap coach-photo">
+                  <img class="photo" [src]="c.photoUrl" [alt]="c.fullName" />
+                  <div class="photo-topline"></div>
 
-                <!-- Видимо всегда: только имя/фамилия -->
-                <div class="name-badge">
-                  <div class="name">{{ coach().fullName }}</div>
-                </div>
-              </div>
-
-              <!-- Остальное: только при наведении -->
-              <div class="details">
-                <div class="details-topline"></div>
-
-                <div class="details-body">
-                  <div class="details-name">{{ coach().fullName }}</div>
-                  <div class="details-role">{{ coach().role }}</div>
-
-                  <div class="details-text">{{ coach().shortBio }}</div>
-
-                  <div class="chips">
-                    <mat-chip-set>
-                      <mat-chip *ngFor="let s of coach().skills.slice(0, 6)">{{ s }}</mat-chip>
-                    </mat-chip-set>
-                  </div>
-
-                  <div class="cta">
-                    <span>Открыть профиль</span>
-                    <span class="dot"></span>
+                  <!-- Видимо всегда: только имя/фамилия -->
+                  <div class="name-badge">
+                    <div class="name">{{ c.fullName }}</div>
                   </div>
                 </div>
-              </div>
-            </mat-card>
-          </button>
+
+                <!-- Остальное: только при наведении -->
+                <div class="details">
+                  <div class="details-topline"></div>
+
+                  <div class="details-body">
+                    <div class="details-name">{{ c.fullName }}</div>
+                    <div class="details-role">{{ c.role }}</div>
+
+                    <div class="details-text">{{ c.shortBio }}</div>
+
+                    <div class="chips">
+                      <mat-chip-set>
+                        <mat-chip *ngFor="let s of c.skills.slice(0, 6)">{{ s }}</mat-chip>
+                      </mat-chip-set>
+                    </div>
+
+                    <div class="cta">
+                      <span>Открыть профиль</span>
+                      <span class="dot"></span>
+                    </div>
+                  </div>
+                </div>
+              </mat-card>
+            </button>
+          </div>
         </section>
 
         <!-- PANEL: Team Members (появляется при скролле) -->
@@ -77,13 +85,11 @@
                       <img class="photo" [src]="m.photoUrl" [alt]="m.fullName" />
                       <div class="photo-topline"></div>
 
-                      <!-- Видимо всегда: только имя/фамилия -->
                       <div class="name-badge">
                         <div class="name">{{ m.fullName }}</div>
                       </div>
                     </div>
 
-                    <!-- Остальное: только при наведении -->
                     <div class="details">
                       <div class="details-topline"></div>
 
